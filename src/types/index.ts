@@ -47,6 +47,8 @@ export interface User {
   username: string;
   // In a real app, password would be hashed and not stored directly
   password?: string; // Only for client-side simulation
+  email?: string;
+  phone?: string;
 }
 
 export interface Testimonial {

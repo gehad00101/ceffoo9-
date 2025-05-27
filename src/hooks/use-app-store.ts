@@ -32,7 +32,7 @@ interface AppState {
   loggedInUser: User | null;
   usersDB: Record<string, User>; // Simplified in-memory/localStorage DB
   login: (username: string, password: string) => Promise<boolean>;
-  register: (username: string, password: string) => Promise<boolean>;
+  register: (username: string, password: string, email?: string, phone?: string) => Promise<boolean>; // Added email and phone
   logout: () => void;
   personalizedWelcome: string | null;
   fetchPersonalizedWelcome: (username: string) => Promise<void>;
@@ -103,7 +103,7 @@ export const useAppStore = create<AppState>()(
         login: async (username, password) => {
           const users = get().usersDB;
           if (users[username] && users[username].password === password) {
-            const user = { username };
+            const user = users[username]; // Get the full user object
             set({ loggedInUser: user });
             await get().fetchPersonalizedWelcome(username);
             get().showAppToast(`أهلاً بك، ${username}! تم تسجيل الدخول بنجاح.`);
@@ -112,16 +112,16 @@ export const useAppStore = create<AppState>()(
           get().showAppToast('اسم المستخدم أو كلمة المرور غير صحيحة.', 'destructive');
           return false;
         },
-        register: async (username, password) => {
+        register: async (username, password, email, phone) => {
           const users = get().usersDB;
           if (users[username]) {
             get().showAppToast('اسم المستخدم هذا موجود بالفعل.', 'destructive');
             return false;
           }
-          const newUser = { username, password }; // In a real app, hash password here
+          const newUser: User = { username, password, email, phone }; // In a real app, hash password here
           set((state) => ({
             usersDB: { ...state.usersDB, [username]: newUser },
-            loggedInUser: { username }, // Automatically log in
+            loggedInUser: newUser, // Automatically log in with the full user object
           }));
           await get().fetchPersonalizedWelcome(username);
           get().showAppToast(`مرحباً بك، ${username}! تم إنشاء الحساب وتسجيل الدخول بنجاح.`);

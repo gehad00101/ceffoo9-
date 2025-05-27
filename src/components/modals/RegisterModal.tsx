@@ -27,6 +27,8 @@ import { X } from "lucide-react";
 
 const registerFormSchema = z.object({
   username: z.string().min(3, { message: "اسم المستخدم يجب أن يكون 3 أحرف على الأقل." }),
+  email: z.string().email({ message: "الرجاء إدخال بريد إلكتروني صحيح." }),
+  phone: z.string().regex(/^(\+966|0)?5\d{8}$/, { message: "الرجاء إدخال رقم هاتف سعودي صحيح (مثال: 05xxxxxxxx أو +9665xxxxxxxx)." }),
   password: z.string().min(6, { message: "كلمة المرور يجب أن تكون 6 أحرف على الأقل." }),
   confirmPassword: z.string().min(6, { message: "تأكيد كلمة المرور مطلوب." }),
 }).refine((data) => data.password === data.confirmPassword, {
@@ -37,19 +39,21 @@ const registerFormSchema = z.object({
 type RegisterFormValues = z.infer<typeof registerFormSchema>;
 
 export default function RegisterModal() {
-  const { openModalType, closeModal, register: storeRegister, openModal, showAppToast } = useAppStore();
+  const { openModalType, closeModal, register: storeRegister, openModal } = useAppStore();
 
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
       username: "",
+      email: "",
+      phone: "",
       password: "",
       confirmPassword: "",
     },
   });
 
   const onSubmit = async (data: RegisterFormValues) => {
-    const success = await storeRegister(data.username, data.password);
+    const success = await storeRegister(data.username, data.password, data.email, data.phone);
     if (success) {
       form.reset();
       closeModal();
@@ -75,7 +79,7 @@ export default function RegisterModal() {
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 p-2">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-2"> {/* Reduced space-y from 6 to 4 */}
             <FormField
               control={form.control}
               name="username"
@@ -84,6 +88,32 @@ export default function RegisterModal() {
                   <FormLabel className="text-lg font-semibold">اسم المستخدم:</FormLabel>
                   <FormControl>
                     <Input placeholder="اسم المستخدم" {...field} className="p-3 text-base"/>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-lg font-semibold">البريد الإلكتروني:</FormLabel>
+                  <FormControl>
+                    <Input type="email" placeholder="example@mail.com" {...field} className="p-3 text-base"/>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-lg font-semibold">رقم الهاتف:</FormLabel>
+                  <FormControl>
+                    <Input type="tel" placeholder="05xxxxxxxx" {...field} className="p-3 text-base"/>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
