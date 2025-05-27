@@ -4,7 +4,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import React, { useState, useEffect } from "react"; // Import useEffect
+import React, { useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -13,16 +13,6 @@ import {
   DialogFooter,
   DialogClose,
 } from "@/components/ui/dialog";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -34,36 +24,29 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useAppStore } from "@/hooks/use-app-store";
-import { CreditCard, Truck, X } from "lucide-react";
+import { X } from "lucide-react";
 
-const checkoutFormSchema = z.object({
+// Schema for customer information only
+const customerInfoSchema = z.object({
   customerName: z.string().min(3, { message: "الاسم يجب أن يكون 3 أحرف على الأقل." }),
   customerEmail: z.string().email({ message: "الرجاء إدخال بريد إلكتروني صحيح." }),
   customerAddress: z.string().min(10, { message: "العنوان يجب أن يكون 10 أحرف على الأقل." }),
   customerPhone: z.string().regex(/^(\+966|0)?5\d{8}$/, { message: "الرجاء إدخال رقم هاتف سعودي صحيح (مثال: 05xxxxxxxx أو +9665xxxxxxxx)." }),
-  paymentMethod: z.enum(['credit_card', 'cash_on_delivery'], {
-    required_error: "الرجاء اختيار طريقة الدفع.",
-  }),
 });
 
-type CheckoutFormValues = z.infer<typeof checkoutFormSchema>;
+type CustomerInfoFormValues = z.infer<typeof customerInfoSchema>;
 
 export default function CheckoutModal() {
-  const { openModalType, closeModal, placeOrder, showAppToast, openModal, loggedInUser } = useAppStore();
-  const [isConfirming, setIsConfirming] = useState(false);
-  const [formData, setFormData] = useState<CheckoutFormValues | null>(null);
+  const { openModalType, closeModal, openModal, loggedInUser, cartTotal } = useAppStore();
 
-
-  const form = useForm<CheckoutFormValues>({
-    resolver: zodResolver(checkoutFormSchema),
+  const form = useForm<CustomerInfoFormValues>({
+    resolver: zodResolver(customerInfoSchema),
     defaultValues: {
       customerName: "",
       customerEmail: "",
       customerAddress: "",
       customerPhone: "",
-      paymentMethod: undefined,
     },
   });
 
@@ -73,56 +56,33 @@ export default function CheckoutModal() {
         form.reset({
           customerName: loggedInUser.username || "",
           customerEmail: loggedInUser.email || "",
-          customerAddress: "", // Address is not stored per user currently
+          customerAddress: "", 
           customerPhone: loggedInUser.phone || "",
-          paymentMethod: form.getValues('paymentMethod') // Keep existing payment method or undefined
         });
       } else {
-        form.reset({ // Reset to empty if no user logged in or user logs out
+        form.reset({ 
           customerName: "",
           customerEmail: "",
           customerAddress: "",
           customerPhone: "",
-          paymentMethod: undefined,
         });
       }
     }
   }, [openModalType, loggedInUser, form]);
 
-
-  const handleActualSubmit = (data: CheckoutFormValues) => {
-    try {
-      const orderDetails = {
-        customerName: data.customerName,
-        customerEmail: data.customerEmail,
-        customerAddress: data.customerAddress,
-        customerPhone: data.customerPhone,
-        paymentMethod: data.paymentMethod,
-      };
-      const orderId = placeOrder(orderDetails);
-      showAppToast("تم تأكيد طلبك بنجاح!");
-      closeModal(); 
-      form.reset(); 
-      openModal('confirmation', { orderId }); 
-    } catch (error) {
-      showAppToast("حدث خطأ أثناء تأكيد الطلب. الرجاء المحاولة مرة أخرى.", "destructive");
-      console.error("Checkout error:", error);
-    }
-    setIsConfirming(false); 
-  };
-
-  const onSubmit = (data: CheckoutFormValues) => {
-    setFormData(data); 
-    setIsConfirming(true); 
+  const onSubmit = (data: CustomerInfoFormValues) => {
+    const totalAmount = cartTotal();
+    closeModal(); 
+    openModal('payment', { customerDetails: data, totalAmount }); 
   };
   
   if (openModalType !== 'checkout') return null;
 
   return (
-    <Dialog open={openModalType === 'checkout'} onOpenChange={(isOpen) => { if (!isOpen) { closeModal(); setIsConfirming(false); }}}>
+    <Dialog open={openModalType === 'checkout'} onOpenChange={(isOpen) => { if (!isOpen) { closeModal(); }}}>
       <DialogContent className="sm:max-w-[500px] bg-card text-card-foreground rounded-lg shadow-xl">
         <DialogHeader>
-          <DialogTitle className="text-3xl font-bold text-center text-primary">معلومات الشحن والدفع</DialogTitle>
+          <DialogTitle className="text-3xl font-bold text-center text-primary">معلومات الشحن</DialogTitle>
            <DialogClose className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
             <X className="h-5 w-5" />
             <span className="sr-only">إغلاق</span>
@@ -183,75 +143,13 @@ export default function CheckoutModal() {
                 </FormItem>
               )}
             />
-
-            <FormField
-              control={form.control}
-              name="paymentMethod"
-              render={({ field }) => (
-                <FormItem className="space-y-3">
-                  <FormLabel className="text-lg font-semibold">طريقة الدفع:</FormLabel>
-                  <FormControl>
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      className="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-4 rtl:space-x-reverse"
-                    >
-                      <FormItem className="flex items-center space-x-2 rtl:space-x-reverse p-3 border rounded-lg hover:bg-accent/10 has-[:checked]:bg-accent/20 has-[:checked]:border-accent transition-all">
-                        <FormControl>
-                          <RadioGroupItem value="credit_card" />
-                        </FormControl>
-                        <FormLabel className="font-normal text-base cursor-pointer flex items-center gap-2">
-                          <CreditCard className="h-5 w-5 text-primary" />
-                          بطاقة ائتمانية
-                        </FormLabel>
-                      </FormItem>
-                      <FormItem className="flex items-center space-x-2 rtl:space-x-reverse p-3 border rounded-lg hover:bg-accent/10 has-[:checked]:bg-accent/20 has-[:checked]:border-accent transition-all">
-                        <FormControl>
-                          <RadioGroupItem value="cash_on_delivery" />
-                        </FormControl>
-                        <FormLabel className="font-normal text-base cursor-pointer flex items-center gap-2">
-                          <Truck className="h-5 w-5 text-primary" />
-                          الدفع عند الاستلام
-                        </FormLabel>
-                      </FormItem>
-                    </RadioGroup>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <DialogFooter className="pt-4">
-                <Button type="submit" size="lg" className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-full shadow-lg">
-                  تأكيد الشراء
+                <Button type="submit" size="lg" className="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-6 rounded-full shadow-lg">
+                  متابعة إلى الدفع
                 </Button>
             </DialogFooter>
           </form>
         </Form>
-
-        <AlertDialog open={isConfirming} onOpenChange={setIsConfirming}>
-          <AlertDialogContent dir="rtl">
-            <AlertDialogHeader>
-              <AlertDialogTitle>تأكيد عملية الشراء</AlertDialogTitle>
-              <AlertDialogDescription>
-                هل أنت متأكد من أنك تريد إتمام عملية الشراء؟ لا يمكن التراجع عن هذا الإجراء بعد التأكيد.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel onClick={() => setIsConfirming(false)}>إلغاء</AlertDialogCancel>
-              <AlertDialogAction 
-                onClick={() => {
-                  if (formData) {
-                    handleActualSubmit(formData);
-                  }
-                }}
-                className="bg-green-600 hover:bg-green-700"
-              >
-                تأكيد
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-
       </DialogContent>
     </Dialog>
   );

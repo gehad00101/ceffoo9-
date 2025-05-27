@@ -10,7 +10,7 @@ import { generateWelcomeMessage } from '@/ai/flows/personalized-welcome-message'
 
 const ALL_MODALS = [
   'cart', 'checkout', 'confirmation', 'tracking', 
-  'productDetail', 'login', 'register'
+  'productDetail', 'login', 'register', 'payment' // Added 'payment' modal type
 ] as const;
 
 type ModalType = typeof ALL_MODALS[number];
@@ -245,12 +245,3 @@ export const useAppStore = create<AppState>()(
     }
   )
 );
-
-// Attempt to fetch personalized welcome message on initial load if a user is logged in.
-// This needs to be done carefully as Zustand state initialization can be tricky outside components.
-// A common pattern is to do this in a top-level component's useEffect.
-// For now, we'll ensure the function is available. Header.tsx already calls this.
-// const initialLoggedInUser = useAppStore.getState().loggedInUser;
-// if (initialLoggedInUser && !useAppStore.getState().personalizedWelcome) {
-//   useAppStore.getState().fetchPersonalizedWelcome(initialLoggedInUser.username);
-// }

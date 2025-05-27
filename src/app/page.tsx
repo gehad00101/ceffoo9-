@@ -9,6 +9,7 @@ import BestSellingSection from '@/components/sections/BestSellingSection'; // <-
 
 import CartModal from '@/components/modals/CartModal';
 import CheckoutModal from '@/components/modals/CheckoutModal';
+import PaymentModal from '@/components/modals/PaymentModal'; // <-- إضافة استيراد مودال الدفع الجديد
 import ConfirmationModal from '@/components/modals/ConfirmationModal';
 import TrackingModal from '@/components/modals/TrackingModal';
 import LoginModal from '@/components/modals/LoginModal';
@@ -31,6 +32,7 @@ export default function Home() {
       {/* Modals */}
       <CartModal />
       <CheckoutModal />
+      <PaymentModal /> {/* <-- إضافة مودال الدفع الجديد هنا */}
       <ConfirmationModal />
       <TrackingModal />
       <LoginModal />
