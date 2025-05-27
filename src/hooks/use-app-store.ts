@@ -139,7 +139,9 @@ export const useAppStore = create<AppState>()(
             set({ personalizedWelcome: result.message });
           } catch (error) {
             console.error("Failed to generate welcome message:", error);
-            set({ personalizedWelcome: `أهلاً بك ${username}!` }); // Fallback
+            // Fallback message if the LLM fails or returns an empty message
+            const fallbackMessage = `أهلاً وسهلاً بك، ${username}! نتمنى لك يوماً سعيداً.`;
+            set({ personalizedWelcome: fallbackMessage }); 
           }
         },
         
@@ -224,9 +226,9 @@ export const useAppStore = create<AppState>()(
         showAppToast: (message, variant = 'default') => {
           toast({ 
             title: message, 
-            description: '', 
+            description: '', // Keep description empty or pass specific content if needed
             variant: variant,
-            dir: 'rtl', 
+            dir: 'rtl', // Ensure toast direction is RTL
           });
         },
       };
@@ -240,7 +242,7 @@ export const useAppStore = create<AppState>()(
         usersDB: state.usersDB,
         orders: state.orders,
         lastOrderId: state.lastOrderId,
-        personalizedWelcome: state.personalizedWelcome,
+        personalizedWelcome: state.personalizedWelcome, // Ensure personalizedWelcome is persisted
       }),
     }
   )
