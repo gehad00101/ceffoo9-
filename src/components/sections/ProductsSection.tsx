@@ -11,14 +11,17 @@ import { AlertCircle, Lightbulb, Search, Coffee } from 'lucide-react';
 import { getCoffeeRecommendations } from '@/ai/flows/coffee-recommendation-flow';
 import type { CoffeeRecommendationOutput } from '@/ai/flows/coffee-recommendation-flow';
 import { useAppStore } from '@/hooks/use-app-store';
-import { products as allProducts } from '@/data/products'; // Import all products for linking
+import type { Product } from '@/types'; // Import Product type
 
 export default function ProductsSection() {
   const [tasteProfileInput, setTasteProfileInput] = useState('');
   const [recommendations, setRecommendations] = useState<CoffeeRecommendationOutput['recommendations'] | null>(null);
   const [isLoadingRecommendations, setIsLoadingRecommendations] = useState(false);
   const [recommendationError, setRecommendationError] = useState<string | null>(null);
-  const { openModal } = useAppStore();
+  const { openModal, products: allProductsFromStore } = useAppStore((state) => ({ // Fetch all products
+    openModal: state.openModal,
+    products: state.products,
+  }));
 
   const handleFetchRecommendations = async () => {
     if (!tasteProfileInput.trim()) {
@@ -46,14 +49,17 @@ export default function ProductsSection() {
 
   const handleRecommendationClick = (productId: string) => {
     if (productId === 'N/A') return;
-    const productToOpen = allProducts.find(p => p.id === productId);
+    const productToOpen = allProductsFromStore.find(p => p.id === productId);
     if (productToOpen) {
       openModal('productDetail', productToOpen);
     } else {
-      // Optionally show a toast or message if product not found, though this shouldn't happen if flow is correct
       console.warn(`Product with ID ${productId} not found in local data.`);
     }
   };
+
+  // Calculate a quarter of the products to display
+  const displayCount = Math.ceil(allProductsFromStore.length / 4);
+  const featuredProducts = allProductsFromStore.slice(0, displayCount);
 
   return (
     <section id="products" className="container mx-auto py-12 px-4">
@@ -126,8 +132,8 @@ export default function ProductsSection() {
             <div className="space-y-4 mt-6">
               <h4 className="text-xl font-semibold text-primary mb-2">توصياتنا لك:</h4>
               {recommendations.map((rec, index) => (
-                <Card 
-                  key={index} 
+                <Card
+                  key={index}
                   className={`bg-background border-border hover:shadow-md transition-shadow cursor-pointer ${rec.productId === 'N/A' ? 'opacity-70' : ''}`}
                   onClick={() => handleRecommendationClick(rec.productId)}
                 >
@@ -147,7 +153,8 @@ export default function ProductsSection() {
         </CardContent>
       </Card>
 
-      <ProductList />
+      <ProductList products={featuredProducts} /> {/* Pass the subset of products */}
     </section>
   );
 }
+

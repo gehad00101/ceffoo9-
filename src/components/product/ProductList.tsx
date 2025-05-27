@@ -1,15 +1,17 @@
+
 "use client";
 
 import ProductCard from './ProductCard';
-import { useAppStore } from '@/hooks/use-app-store';
-import type { Product } from '@/types'; // Import Product type
+// Removed: import { useAppStore } from '@/hooks/use-app-store';
+import type { Product } from '@/types';
 
-export default function ProductList() {
-  const allProducts = useAppStore((state) => state.products);
+interface ProductListProps {
+  products: Product[];
+}
 
-  // No filtering here, display all products by default.
-  // Specific pages like /coffee-tools or /coffee-selection will handle their own filtering.
-  const productsToDisplay: Product[] = allProducts;
+export default function ProductList({ products }: ProductListProps) {
+  // Products are now passed as a prop
+  const productsToDisplay: Product[] = products;
 
   if (!productsToDisplay || productsToDisplay.length === 0) {
     return <p className="text-center text-lg text-foreground/70">لا توجد منتجات لعرضها حالياً.</p>;
@@ -23,3 +25,4 @@ export default function ProductList() {
     </div>
   );
 }
+
