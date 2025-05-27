@@ -4,7 +4,7 @@ import type { Product, CartItem, Order, User, OrderStatus, OrderHistoryEntry } f
 import { products as initialProducts } from '@/data/products';
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { toast } from '@/hooks/use-toast'; // Changed from useToast
+import { toast } from '@/hooks/use-toast'; 
 import { generateWelcomeMessage } from '@/ai/flows/personalized-welcome-message';
 
 
@@ -47,7 +47,7 @@ interface AppState {
   // Orders
   orders: Record<string, Order>; // Store orders by ID
   lastOrderId: string | null;
-  placeOrder: (orderDetails: Omit<Order, 'id' | 'orderDate' | 'status' | 'history' | 'items' | 'totalAmount'>) => string;
+  placeOrder: (orderDetails: Omit<Order, 'id' | 'orderDate' | 'status' | 'history' | 'items' | 'totalAmount'> & { paymentMethod: 'credit_card' | 'cash_on_delivery' }) => string;
   getOrderStatus: (orderId: string) => Order | null;
   updateOrderStatus: (orderId: string) => void; // Simulates status progression
 
@@ -58,8 +58,6 @@ interface AppState {
 export const useAppStore = create<AppState>()(
   persist(
     (set, get) => {
-      // const { toast } = useToast(); // Get toast function from the hook - THIS WAS THE ISSUE
-
       return {
         products: initialProducts,
         cart: [],
@@ -151,8 +149,12 @@ export const useAppStore = create<AppState>()(
         placeOrder: (orderDetails) => {
           const orderId = 'ORD-' + Date.now().toString().substring(5) + Math.random().toString(36).substring(2, 6).toUpperCase();
           const newOrder: Order = {
-            ...orderDetails,
             id: orderId,
+            customerName: orderDetails.customerName,
+            customerEmail: orderDetails.customerEmail,
+            customerAddress: orderDetails.customerAddress,
+            customerPhone: orderDetails.customerPhone,
+            paymentMethod: orderDetails.paymentMethod, // Store payment method
             items: get().cart,
             totalAmount: get().cartTotal(),
             orderDate: new Date().toISOString(),
@@ -220,7 +222,7 @@ export const useAppStore = create<AppState>()(
         },
         
         showAppToast: (message, variant = 'default') => {
-          toast({ // Use the imported toast function directly
+          toast({ 
             title: message, 
             description: '', 
             variant: variant,
@@ -252,4 +254,3 @@ export const useAppStore = create<AppState>()(
 // if (initialLoggedInUser && !useAppStore.getState().personalizedWelcome) {
 //   useAppStore.getState().fetchPersonalizedWelcome(initialLoggedInUser.username);
 // }
-

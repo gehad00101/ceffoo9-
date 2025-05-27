@@ -1,3 +1,4 @@
+
 export interface Product {
   id: string;
   name: string;
@@ -20,6 +21,7 @@ export interface Order {
   customerEmail: string;
   customerAddress: string;
   customerPhone: string;
+  paymentMethod?: 'credit_card' | 'cash_on_delivery'; // Added paymentMethod
   items: CartItem[];
   totalAmount: number;
   orderDate: string;

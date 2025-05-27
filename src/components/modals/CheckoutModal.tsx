@@ -1,3 +1,4 @@
+
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,14 +23,18 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useAppStore } from "@/hooks/use-app-store";
-import { X } from "lucide-react";
+import { CreditCard, Truck, X } from "lucide-react";
 
 const checkoutFormSchema = z.object({
   customerName: z.string().min(3, { message: "الاسم يجب أن يكون 3 أحرف على الأقل." }),
   customerEmail: z.string().email({ message: "الرجاء إدخال بريد إلكتروني صحيح." }),
   customerAddress: z.string().min(10, { message: "العنوان يجب أن يكون 10 أحرف على الأقل." }),
   customerPhone: z.string().regex(/^(\+966|0)?5\d{8}$/, { message: "الرجاء إدخال رقم هاتف سعودي صحيح (مثال: 05xxxxxxxx أو +9665xxxxxxxx)." }),
+  paymentMethod: z.enum(['credit_card', 'cash_on_delivery'], {
+    required_error: "الرجاء اختيار طريقة الدفع.",
+  }),
 });
 
 type CheckoutFormValues = z.infer<typeof checkoutFormSchema>;
@@ -44,12 +49,20 @@ export default function CheckoutModal() {
       customerEmail: "",
       customerAddress: "",
       customerPhone: "",
+      paymentMethod: undefined,
     },
   });
 
   const onSubmit = (data: CheckoutFormValues) => {
     try {
-      const orderId = placeOrder(data);
+      const orderDetails = {
+        customerName: data.customerName,
+        customerEmail: data.customerEmail,
+        customerAddress: data.customerAddress,
+        customerPhone: data.customerPhone,
+        paymentMethod: data.paymentMethod,
+      };
+      const orderId = placeOrder(orderDetails);
       showAppToast("تم تأكيد طلبك بنجاح!");
       closeModal(); // Close checkout modal
       form.reset(); // Reset form fields
@@ -66,7 +79,7 @@ export default function CheckoutModal() {
     <Dialog open={openModalType === 'checkout'} onOpenChange={(isOpen) => !isOpen && closeModal()}>
       <DialogContent className="sm:max-w-[500px] bg-card text-card-foreground rounded-lg shadow-xl">
         <DialogHeader>
-          <DialogTitle className="text-3xl font-bold text-center text-primary">معلومات الشحن</DialogTitle>
+          <DialogTitle className="text-3xl font-bold text-center text-primary">معلومات الشحن والدفع</DialogTitle>
            <DialogClose className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
             <X className="h-5 w-5" />
             <span className="sr-only">إغلاق</span>
@@ -122,6 +135,43 @@ export default function CheckoutModal() {
                   <FormLabel className="text-lg font-semibold">رقم الهاتف:</FormLabel>
                   <FormControl>
                     <Input type="tel" placeholder="05xxxxxxxx" {...field} className="p-3 text-base"/>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="paymentMethod"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormLabel className="text-lg font-semibold">طريقة الدفع:</FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-4 rtl:space-x-reverse"
+                    >
+                      <FormItem className="flex items-center space-x-2 rtl:space-x-reverse p-3 border rounded-lg hover:bg-accent/10 has-[:checked]:bg-accent/20 has-[:checked]:border-accent transition-all">
+                        <FormControl>
+                          <RadioGroupItem value="credit_card" />
+                        </FormControl>
+                        <FormLabel className="font-normal text-base cursor-pointer flex items-center gap-2">
+                          <CreditCard className="h-5 w-5 text-primary" />
+                          بطاقة ائتمانية
+                        </FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-2 rtl:space-x-reverse p-3 border rounded-lg hover:bg-accent/10 has-[:checked]:bg-accent/20 has-[:checked]:border-accent transition-all">
+                        <FormControl>
+                          <RadioGroupItem value="cash_on_delivery" />
+                        </FormControl>
+                        <FormLabel className="font-normal text-base cursor-pointer flex items-center gap-2">
+                          <Truck className="h-5 w-5 text-primary" />
+                          الدفع عند الاستلام
+                        </FormLabel>
+                      </FormItem>
+                    </RadioGroup>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
