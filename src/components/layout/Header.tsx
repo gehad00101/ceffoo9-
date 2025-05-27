@@ -1,7 +1,8 @@
+
 "use client";
 
 import Link from 'next/link';
-import { Menu, ShoppingCart, UserCircle, LogOut, LogIn } from 'lucide-react';
+import { Menu, ShoppingCart, LogOut, LogIn, Coffee } from 'lucide-react'; // Added Coffee icon
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import { useAppStore } from '@/hooks/use-app-store';
@@ -37,7 +38,8 @@ export default function Header() {
   return (
     <header className="bg-gradient-to-r from-amber-900 to-amber-700 text-white shadow-lg p-4 md:p-6 rounded-b-lg sticky top-0 z-50">
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
-        <Link href="/" className="text-3xl font-bold mb-4 md:mb-0 transform transition-transform duration-300 hover:scale-105">
+        <Link href="/" className="text-3xl font-bold mb-4 md:mb-0 transform transition-transform duration-300 hover:scale-105 flex items-center gap-2">
+          <Coffee className="h-8 w-8" /> {/* Added Coffee icon */}
           متجر القهوة الفاخرة
         </Link>
         
