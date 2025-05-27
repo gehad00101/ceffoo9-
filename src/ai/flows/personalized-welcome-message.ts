@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -31,7 +32,11 @@ const welcomeMessagePrompt = ai.definePrompt({
   name: 'welcomeMessagePrompt',
   input: {schema: WelcomeMessageInputSchema},
   output: {schema: WelcomeMessageOutputSchema},
-  prompt: `أهلاً بك {{username}}! 👋 نتمنى لك تجربة تسوق ممتعة في متجر القهوة الفاخرة. اكتشف مجموعتنا المميزة من أجود أنواع البن واستمتع بأفضل قهوة على الإطلاق.`, // Already personalized in arabic
+  prompt: `أنت مساعد ترحيبي في "متجر القهوة الفاخرة". قم بصياغة رسالة ترحيب شخصية ودافئة للمستخدم "{{username}}".
+يجب أن تكون الرسالة باللغة العربية، قصيرة، ودودة، ومشجعة على استكشاف تشكيلة القهوة المميزة لدينا.
+مثال للأسلوب: "أهلاً بك يا {{username}} في متجرنا! نتمنى لك رحلة ممتعة بين نكهات القهوة الساحرة."
+أو "يا هلا بك {{username}}! سعيدون بوجودك. اكتشف قهوتك المفضلة اليوم."
+حافظ على نبرة إيجابية ومرحبة.`,
 });
 
 const generateWelcomeMessageFlow = ai.defineFlow(
@@ -42,6 +47,11 @@ const generateWelcomeMessageFlow = ai.defineFlow(
   },
   async input => {
     const {output} = await welcomeMessagePrompt(input);
-    return output!;
+    if (!output || !output.message) {
+      // Fallback message if the LLM fails or returns an empty message
+      return { message: `أهلاً وسهلاً بك، ${input.username}! نتمنى لك يوماً سعيداً.` };
+    }
+    return output;
   }
 );
+
