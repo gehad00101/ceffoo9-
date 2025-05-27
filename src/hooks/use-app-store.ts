@@ -4,7 +4,7 @@ import type { Product, CartItem, Order, User, OrderStatus, OrderHistoryEntry } f
 import { products as initialProducts } from '@/data/products';
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { useToast } from '@/hooks/use-toast';
+import { toast } from '@/hooks/use-toast'; // Changed from useToast
 import { generateWelcomeMessage } from '@/ai/flows/personalized-welcome-message';
 
 
@@ -58,7 +58,7 @@ interface AppState {
 export const useAppStore = create<AppState>()(
   persist(
     (set, get) => {
-      const { toast } = useToast(); // Get toast function from the hook
+      // const { toast } = useToast(); // Get toast function from the hook - THIS WAS THE ISSUE
 
       return {
         products: initialProducts,
@@ -220,11 +220,11 @@ export const useAppStore = create<AppState>()(
         },
         
         showAppToast: (message, variant = 'default') => {
-          toast({
-            title: message, // In RTL, title is main message
-            description: '', // Keep description empty or use for secondary info
+          toast({ // Use the imported toast function directly
+            title: message, 
+            description: '', 
             variant: variant,
-            dir: 'rtl', // Ensure toast itself respects RTL
+            dir: 'rtl', 
           });
         },
       };
@@ -252,3 +252,4 @@ export const useAppStore = create<AppState>()(
 // if (initialLoggedInUser && !useAppStore.getState().personalizedWelcome) {
 //   useAppStore.getState().fetchPersonalizedWelcome(initialLoggedInUser.username);
 // }
+
