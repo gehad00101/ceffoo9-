@@ -76,6 +76,81 @@ export const products: Product[] = [
       'https://placehold.co/400x300.png'
     ],
     category: 'قهوة مختصة',
+  },
+  {
+    id: 'tool001',
+    name: 'مطحنة قهوة يدوية فاخرة',
+    price: 180,
+    image: 'https://placehold.co/400x300.png',
+    dataAiHint: 'manual coffee grinder',
+    description: 'مطحنة يدوية بشفرات سيراميك قابلة للتعديل لطحن دقيق ومتناسق.',
+    fullDescription: 'تحكم كامل في درجة طحن قهوتك مع مطحنتنا اليدوية الفاخرة. تتميز بشفرات طحن من السيراميك توفر طحنًا متناسقًا وتحافظ على نكهة البن. تصميم متين وأنيق، مثالية للمنزل والسفر.',
+    additionalImages: [
+      'https://placehold.co/400x300.png',
+      'https://placehold.co/400x300.png',
+      'https://placehold.co/400x300.png'
+    ],
+    category: 'أدوات القهوة',
+  },
+  {
+    id: 'tool002',
+    name: 'قمع تقطير V60 سيراميك',
+    price: 95,
+    image: 'https://placehold.co/400x300.png',
+    dataAiHint: 'V60 ceramic dripper',
+    description: 'قمع تقطير V60 كلاسيكي مصنوع من السيراميك لاستخلاص مثالي.',
+    fullDescription: 'استمتع بتجربة تحضير القهوة المقطرة مع قمع V60 المصنوع من السيراميك عالي الجودة. يساعد تصميمه الحلزوني وفتحة التصريف الكبيرة على التحكم في تدفق الماء واستخلاص النكهات بشكل كامل. متوفر بألوان متعددة.',
+    additionalImages: [
+      'https://placehold.co/400x300.png',
+      'https://placehold.co/400x300.png',
+      'https://placehold.co/400x300.png'
+    ],
+    category: 'أدوات القهوة',
+  },
+  {
+    id: 'tool003',
+    name: 'إبريق ترشيح احترافي (Gooseneck)',
+    price: 220,
+    image: 'https://placehold.co/400x300.png',
+    dataAiHint: 'gooseneck kettle',
+    description: 'إبريق ترشيح من الستانلس ستيل بفوهة دقيقة للتحكم في صب الماء.',
+    fullDescription: 'إبريق الترشيح الاحترافي هذا ضروري لكل محب للقهوة المقطرة. فوهته الطويلة والرفيعة (Gooseneck) توفر تدفق ماء دقيق ومتحكم به، مما يسمح لك باستخلاص أفضل ما في حبوب القهوة. مصنوع من الستانلس ستيل المقاوم للصدأ وسعة 1 لتر.',
+    additionalImages: [
+      'https://placehold.co/400x300.png',
+      'https://placehold.co/400x300.png',
+      'https://placehold.co/400x300.png'
+    ],
+    category: 'أدوات القهوة',
+  },
+  {
+    id: 'tool004',
+    name: 'ميزان قهوة رقمي مع مؤقت',
+    price: 150,
+    image: 'https://placehold.co/400x300.png',
+    dataAiHint: 'digital coffee scale',
+    description: 'ميزان رقمي دقيق مع مؤقت مدمج لقياسات مثالية عند تحضير القهوة.',
+    fullDescription: 'الدقة هي مفتاح القهوة الرائعة. يوفر هذا الميزان الرقمي قياسات دقيقة تصل إلى 0.1 جرام، مع مؤقت مدمج لمساعدتك في التحكم في وقت الاستخلاص. شاشة LCD واضحة وسهل الاستخدام.',
+    additionalImages: [
+      'https://placehold.co/400x300.png',
+      'https://placehold.co/400x300.png',
+      'https://placehold.co/400x300.png'
+    ],
+    category: 'أدوات القهوة',
+  },
+  {
+    id: 'tool005',
+    name: 'فلاتر ورقية V60 (100 قطعة)',
+    price: 35,
+    image: 'https://placehold.co/400x300.png',
+    dataAiHint: 'V60 paper filters',
+    description: 'فلاتر ورقية طبيعية عالية الجودة متوافقة مع قمع V60 حجم 02.',
+    fullDescription: 'فلاتر ورقية مصممة خصيصًا لأقماع V60 (حجم 02). مصنوعة من ورق طبيعي غير مبيض، تضمن تدفقًا مثاليًا للماء وتصفية نقية للحصول على كوب قهوة صافي ونظيف النكهة. تحتوي العبوة على 100 فلتر.',
+    additionalImages: [
+      'https://placehold.co/400x300.png',
+      'https://placehold.co/400x300.png',
+      'https://placehold.co/400x300.png'
+    ],
+    category: 'أدوات القهوة',
   }
 ];
 
@@ -99,5 +174,16 @@ export const testimonials: Testimonial[] = [
     quote: "قهوة المساء الدافئة أصبحت جزءاً لا يتجزأ من روتيني اليومي. طعم رائع!",
     author: "علي ح.",
     location: "مكة المكرمة"
+  },
+  {
+    quote: "اشتريت مطحنة القهوة اليدوية، وهي ممتازة! الطحن متناسق والقهوة أصبحت ألذ.",
+    author: "نورة س.",
+    location: "المدينة المنورة"
+  },
+  {
+    quote: "أدوات التقطير التي طلبتها ذات جودة عالية جدًا. شكرًا لمتجر القهوة الفاخرة!",
+    author: "خالد ب.",
+    location: "الخبر"
   }
 ];
+
