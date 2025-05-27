@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAppStore } from "@/hooks/use-app-store";
 import { X, Plus, Minus } from "lucide-react";
+import { cn } from "@/lib/utils"; // Import cn utility
 
 export default function ProductDetailModal() {
   const { openModalType, closeModal, modalData, addToCart, openModal } = useAppStore();
@@ -74,9 +75,13 @@ export default function ProductDetailModal() {
             </div>
             <div className="flex flex-wrap gap-2 justify-center mt-2">
               {[product.image, ...product.additionalImages].map((img, idx) => (
-                <div key={idx} className="relative w-20 h-20 rounded-md overflow-hidden cursor-pointer border-2 hover:border-primary transition"
+                <div 
+                  key={idx} 
+                  className={cn(
+                    "relative w-20 h-20 rounded-md overflow-hidden cursor-pointer border-2 transition-all duration-200",
+                    mainImage === img ? "border-primary ring-2 ring-primary ring-offset-background ring-offset-2" : "border-border hover:border-primary"
+                  )}
                   onClick={() => setMainImage(img)}
-                  data-active={mainImage === img}
                 >
                   <Image 
                     src={img} 
@@ -136,3 +141,4 @@ export default function ProductDetailModal() {
     </Dialog>
   );
 }
+
