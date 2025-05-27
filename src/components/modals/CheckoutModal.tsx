@@ -4,6 +4,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import React, { useState } from "react"; // Import useState
 import {
   Dialog,
   DialogContent,
@@ -12,6 +13,17 @@ import {
   DialogFooter,
   DialogClose,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -41,6 +53,9 @@ type CheckoutFormValues = z.infer<typeof checkoutFormSchema>;
 
 export default function CheckoutModal() {
   const { openModalType, closeModal, placeOrder, showAppToast, openModal } = useAppStore();
+  const [isConfirming, setIsConfirming] = useState(false); // State for AlertDialog
+  const [formData, setFormData] = useState<CheckoutFormValues | null>(null);
+
 
   const form = useForm<CheckoutFormValues>({
     resolver: zodResolver(checkoutFormSchema),
@@ -53,7 +68,7 @@ export default function CheckoutModal() {
     },
   });
 
-  const onSubmit = (data: CheckoutFormValues) => {
+  const handleActualSubmit = (data: CheckoutFormValues) => {
     try {
       const orderDetails = {
         customerName: data.customerName,
@@ -71,12 +86,19 @@ export default function CheckoutModal() {
       showAppToast("حدث خطأ أثناء تأكيد الطلب. الرجاء المحاولة مرة أخرى.", "destructive");
       console.error("Checkout error:", error);
     }
+    setIsConfirming(false); // Close AlertDialog
+  };
+
+  // This function is called when the form is submitted
+  const onSubmit = (data: CheckoutFormValues) => {
+    setFormData(data); // Store form data
+    setIsConfirming(true); // Open the AlertDialog
   };
   
   if (openModalType !== 'checkout') return null;
 
   return (
-    <Dialog open={openModalType === 'checkout'} onOpenChange={(isOpen) => !isOpen && closeModal()}>
+    <Dialog open={openModalType === 'checkout'} onOpenChange={(isOpen) => { if (!isOpen) { closeModal(); setIsConfirming(false); }}}>
       <DialogContent className="sm:max-w-[500px] bg-card text-card-foreground rounded-lg shadow-xl">
         <DialogHeader>
           <DialogTitle className="text-3xl font-bold text-center text-primary">معلومات الشحن والدفع</DialogTitle>
@@ -178,12 +200,39 @@ export default function CheckoutModal() {
               )}
             />
             <DialogFooter className="pt-4">
-              <Button type="submit" size="lg" className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-full shadow-lg">
-                تأكيد الشراء
-              </Button>
+                {/* This button now triggers the AlertDialog */}
+                <Button type="submit" size="lg" className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-full shadow-lg">
+                  تأكيد الشراء
+                </Button>
             </DialogFooter>
           </form>
         </Form>
+
+        {/* AlertDialog for pre-purchase confirmation */}
+        <AlertDialog open={isConfirming} onOpenChange={setIsConfirming}>
+          <AlertDialogContent dir="rtl">
+            <AlertDialogHeader>
+              <AlertDialogTitle>تأكيد عملية الشراء</AlertDialogTitle>
+              <AlertDialogDescription>
+                هل أنت متأكد من أنك تريد إتمام عملية الشراء؟ لا يمكن التراجع عن هذا الإجراء بعد التأكيد.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={() => setIsConfirming(false)}>إلغاء</AlertDialogCancel>
+              <AlertDialogAction 
+                onClick={() => {
+                  if (formData) {
+                    handleActualSubmit(formData);
+                  }
+                }}
+                className="bg-green-600 hover:bg-green-700"
+              >
+                تأكيد
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
       </DialogContent>
     </Dialog>
   );
