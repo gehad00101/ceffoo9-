@@ -1,3 +1,4 @@
+
 "use client";
 import type { Product, CartItem, Order, User, OrderStatus, OrderHistoryEntry } from '@/types';
 import { products as initialProducts } from '@/data/products';
@@ -119,10 +120,10 @@ export const useAppStore = create<AppState>()(
             get().showAppToast('اسم المستخدم هذا موجود بالفعل.', 'destructive');
             return false;
           }
-          const newUser = { username, password };
+          const newUser = { username, password }; // In a real app, hash password here
           set((state) => ({
             usersDB: { ...state.usersDB, [username]: newUser },
-            loggedInUser: { username },
+            loggedInUser: { username }, // Automatically log in
           }));
           await get().fetchPersonalizedWelcome(username);
           get().showAppToast(`مرحباً بك، ${username}! تم إنشاء الحساب وتسجيل الدخول بنجاح.`);
@@ -134,13 +135,13 @@ export const useAppStore = create<AppState>()(
         },
         fetchPersonalizedWelcome: async (username) => {
           if (!username) return;
+          set({ personalizedWelcome: null }); // Clear previous or show loading
           try {
             const result = await generateWelcomeMessage({ username });
             set({ personalizedWelcome: result.message });
           } catch (error) {
             console.error("Failed to generate welcome message:", error);
-            // Set a default message or handle error appropriately
-            set({ personalizedWelcome: `أهلاً بك ${username}!` });
+            set({ personalizedWelcome: `أهلاً بك ${username}!` }); // Fallback
           }
         },
         
@@ -156,6 +157,7 @@ export const useAppStore = create<AppState>()(
             totalAmount: get().cartTotal(),
             orderDate: new Date().toISOString(),
             status: 'تم تأكيد الطلب',
+             estimatedDelivery: new Date(Date.now() + (Math.floor(Math.random() * 3) + 2) * 24 * 60 * 60 * 1000).toLocaleDateString('ar-SA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
             history: [
               { date: new Date().toLocaleString('ar-SA'), description: 'تم استلام الطلب بنجاح.', icon: 'ClipboardCheck' }
             ]
@@ -168,11 +170,10 @@ export const useAppStore = create<AppState>()(
           return orderId;
         },
         getOrderStatus: (orderId) => {
-           // Before returning, simulate an update if the order exists
           const order = get().orders[orderId];
           if (order) {
-            get().updateOrderStatus(orderId); // Simulate progress
-            return get().orders[orderId]; // Return potentially updated order
+            get().updateOrderStatus(orderId); 
+            return get().orders[orderId]; 
           }
           return null;
         },
@@ -183,7 +184,7 @@ export const useAppStore = create<AppState>()(
 
             const statuses: { name: OrderStatus; icon: string; description: string }[] = [
               { name: 'تم تأكيد الطلب', icon: 'ClipboardCheck', description: 'تم استلام الطلب بنجاح.' },
-              { name: 'قيد التجهيز', icon: 'BoxOpen', description: 'بدأ تجهيز طلبك في المستودع وتعبئته للشحن.' },
+              { name: 'قيد التجهيز', icon: 'PackageOpen', description: 'بدأ تجهيز طلبك في المستودع وتعبئته للشحن.' },
               { name: 'تم الشحن', icon: 'Truck', description: 'تم شحن طلبك من مركز التوزيع الخاص بنا.' },
               { name: 'في طريقها للتسليم', icon: 'PackageSearch', description: 'مندوب التوصيل في طريقه إليك الآن. يرجى التأكد من توفرك.' },
               { name: 'تم التسليم', icon: 'PackageCheck', description: 'تم تسليم طلبك بنجاح. نأمل أن تستمتع بقهوتك!' }
@@ -193,8 +194,9 @@ export const useAppStore = create<AppState>()(
             let newStatus = order.status;
             let newHistoryEntry: OrderHistoryEntry | null = null;
 
+            // Simulate progression: 60% chance to advance if not already delivered
             if (currentIndex < statuses.length - 1) {
-              if (Math.random() > 0.4) { // 60% chance to advance
+              if (Math.random() > 0.4) { 
                 const nextStatusInfo = statuses[currentIndex + 1];
                 newStatus = nextStatusInfo.name;
                 newHistoryEntry = {
@@ -210,26 +212,27 @@ export const useAppStore = create<AppState>()(
                 ...order,
                 status: newStatus,
                 history: [...order.history, newHistoryEntry],
-                estimatedDelivery: order.estimatedDelivery || new Date(Date.now() + (Math.floor(Math.random() * 3) + 2) * 24 * 60 * 60 * 1000).toLocaleDateString('ar-SA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
               };
               return { orders: { ...state.orders, [orderId]: updatedOrder } };
             }
-            return {};
+            return {}; // No change
           });
         },
         
         showAppToast: (message, variant = 'default') => {
           toast({
-            title: message,
+            title: message, // In RTL, title is main message
+            description: '', // Keep description empty or use for secondary info
             variant: variant,
+            dir: 'rtl', // Ensure toast itself respects RTL
           });
         },
       };
     },
     {
-      name: 'coffee-shop-storage', // name of item in localStorage
-      storage: createJSONStorage(() => localStorage), // use localStorage
-      partialize: (state) => ({ // Persist only these parts of the state
+      name: 'coffee-shop-storage', 
+      storage: createJSONStorage(() => localStorage), 
+      partialize: (state) => ({ 
         cart: state.cart,
         loggedInUser: state.loggedInUser,
         usersDB: state.usersDB,
@@ -241,8 +244,11 @@ export const useAppStore = create<AppState>()(
   )
 );
 
-// Call fetchPersonalizedWelcome on initial load if user is logged in
-const initialLoggedInUser = useAppStore.getState().loggedInUser;
-if (initialLoggedInUser) {
-  useAppStore.getState().fetchPersonalizedWelcome(initialLoggedInUser.username);
-}
+// Attempt to fetch personalized welcome message on initial load if a user is logged in.
+// This needs to be done carefully as Zustand state initialization can be tricky outside components.
+// A common pattern is to do this in a top-level component's useEffect.
+// For now, we'll ensure the function is available. Header.tsx already calls this.
+// const initialLoggedInUser = useAppStore.getState().loggedInUser;
+// if (initialLoggedInUser && !useAppStore.getState().personalizedWelcome) {
+//   useAppStore.getState().fetchPersonalizedWelcome(initialLoggedInUser.username);
+// }

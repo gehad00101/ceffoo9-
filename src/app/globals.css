@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -99,7 +100,21 @@
   }
   body {
     @apply bg-background text-foreground;
-    /* overflow-x: hidden; /* Generally not recommended, layout should handle this */
+  }
+  /* Custom scrollbar for Webkit browsers */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--muted)); /* Use theme color */
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--accent)); /* Use theme color */
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--primary)); /* Use theme color */
   }
 }
 
@@ -134,9 +149,3 @@
   animation: fadeInUp 1s ease-out 0.5s; /* Delay for subtitle */
   animation-fill-mode: backwards; /* Element starts transparent */
 }
-
-/* For a one-time bounce, Tailwind's animate-bounce is repetitive.
-   Let's define a custom one if needed or use a subtle hover effect.
-   The user's HTML has animate-bounce-once, likely custom.
-   For simplicity, a hover scale is often enough.
-*/
