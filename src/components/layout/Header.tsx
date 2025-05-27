@@ -10,10 +10,11 @@ import React, { useEffect } from 'react';
 import PersonalizedWelcomeMessage from './PersonalizedWelcomeMessage';
 
 const navLinks = [
-  { href: '#home', label: 'الرئيسية' },
-  { href: '#products', label: 'منتجاتنا' },
-  { href: '#about', label: 'من نحن' },
-  { href: '#contact', label: 'اتصل بنا' },
+  { href: '/', label: 'الرئيسية' }, // Changed from #home to / for root page
+  { href: '/#products', label: 'منتجاتنا' }, // Keep as hash link if products is on home
+  { href: '/coffee-tools', label: 'أدوات القهوة' },
+  { href: '/#about', label: 'من نحن' }, // Keep as hash link
+  { href: '/#contact', label: 'اتصل بنا' }, // Keep as hash link
 ];
 
 export default function Header() {
