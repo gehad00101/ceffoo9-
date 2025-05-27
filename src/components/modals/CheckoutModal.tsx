@@ -4,7 +4,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import React, { useState } from "react"; // Import useState
+import React, { useState, useEffect } from "react"; // Import useEffect
 import {
   Dialog,
   DialogContent,
@@ -22,7 +22,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
@@ -52,8 +51,8 @@ const checkoutFormSchema = z.object({
 type CheckoutFormValues = z.infer<typeof checkoutFormSchema>;
 
 export default function CheckoutModal() {
-  const { openModalType, closeModal, placeOrder, showAppToast, openModal } = useAppStore();
-  const [isConfirming, setIsConfirming] = useState(false); // State for AlertDialog
+  const { openModalType, closeModal, placeOrder, showAppToast, openModal, loggedInUser } = useAppStore();
+  const [isConfirming, setIsConfirming] = useState(false);
   const [formData, setFormData] = useState<CheckoutFormValues | null>(null);
 
 
@@ -68,6 +67,29 @@ export default function CheckoutModal() {
     },
   });
 
+  useEffect(() => {
+    if (openModalType === 'checkout') {
+      if (loggedInUser) {
+        form.reset({
+          customerName: loggedInUser.username || "",
+          customerEmail: loggedInUser.email || "",
+          customerAddress: "", // Address is not stored per user currently
+          customerPhone: loggedInUser.phone || "",
+          paymentMethod: form.getValues('paymentMethod') // Keep existing payment method or undefined
+        });
+      } else {
+        form.reset({ // Reset to empty if no user logged in or user logs out
+          customerName: "",
+          customerEmail: "",
+          customerAddress: "",
+          customerPhone: "",
+          paymentMethod: undefined,
+        });
+      }
+    }
+  }, [openModalType, loggedInUser, form]);
+
+
   const handleActualSubmit = (data: CheckoutFormValues) => {
     try {
       const orderDetails = {
@@ -79,20 +101,19 @@ export default function CheckoutModal() {
       };
       const orderId = placeOrder(orderDetails);
       showAppToast("تم تأكيد طلبك بنجاح!");
-      closeModal(); // Close checkout modal
-      form.reset(); // Reset form fields
-      openModal('confirmation', { orderId }); // Open confirmation modal
+      closeModal(); 
+      form.reset(); 
+      openModal('confirmation', { orderId }); 
     } catch (error) {
       showAppToast("حدث خطأ أثناء تأكيد الطلب. الرجاء المحاولة مرة أخرى.", "destructive");
       console.error("Checkout error:", error);
     }
-    setIsConfirming(false); // Close AlertDialog
+    setIsConfirming(false); 
   };
 
-  // This function is called when the form is submitted
   const onSubmit = (data: CheckoutFormValues) => {
-    setFormData(data); // Store form data
-    setIsConfirming(true); // Open the AlertDialog
+    setFormData(data); 
+    setIsConfirming(true); 
   };
   
   if (openModalType !== 'checkout') return null;
@@ -200,7 +221,6 @@ export default function CheckoutModal() {
               )}
             />
             <DialogFooter className="pt-4">
-                {/* This button now triggers the AlertDialog */}
                 <Button type="submit" size="lg" className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-full shadow-lg">
                   تأكيد الشراء
                 </Button>
@@ -208,7 +228,6 @@ export default function CheckoutModal() {
           </form>
         </Form>
 
-        {/* AlertDialog for pre-purchase confirmation */}
         <AlertDialog open={isConfirming} onOpenChange={setIsConfirming}>
           <AlertDialogContent dir="rtl">
             <AlertDialogHeader>
