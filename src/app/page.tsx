@@ -5,6 +5,7 @@ import HeroSection from '@/components/sections/HeroSection';
 import AboutSection from '@/components/sections/AboutSection';
 import TestimonialsSection from '@/components/sections/TestimonialsSection';
 import ProductsSection from '@/components/sections/ProductsSection';
+import BestSellingSection from '@/components/sections/BestSellingSection'; // <-- إضافة استيراد القسم الجديد
 
 import CartModal from '@/components/modals/CartModal';
 import CheckoutModal from '@/components/modals/CheckoutModal';
@@ -20,6 +21,7 @@ export default function Home() {
       <Header />
       <main className="flex-grow">
         <HeroSection />
+        <BestSellingSection /> {/* <-- إضافة القسم الجديد هنا */}
         <ProductsSection />
         <AboutSection />
         <TestimonialsSection />
