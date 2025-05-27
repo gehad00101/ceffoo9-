@@ -7,13 +7,12 @@ import type { Product } from '@/types'; // Import Product type
 export default function ProductList() {
   const allProducts = useAppStore((state) => state.products);
 
-  // Filter out products belonging to the 'أدوات القهوة' category
-  const productsToDisplay: Product[] = allProducts.filter(
-    (product) => product.category !== 'أدوات القهوة'
-  );
+  // No filtering here, display all products by default.
+  // Specific pages like /coffee-tools or /coffee-selection will handle their own filtering.
+  const productsToDisplay: Product[] = allProducts;
 
   if (!productsToDisplay || productsToDisplay.length === 0) {
-    return <p className="text-center text-lg text-foreground/70">لا توجد منتجات قهوة لعرضها حالياً.</p>;
+    return <p className="text-center text-lg text-foreground/70">لا توجد منتجات لعرضها حالياً.</p>;
   }
 
   return (
