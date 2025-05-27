@@ -1,0 +1,307 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متجر القهوة الفاخرة - تمثيل HTML</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --background: 60 56% 91%; /* Light Beige #F5F5DC */
+            --foreground: 0 0% 20%; /* Dark Gray #333333 */
+            --card: 60 50% 97%;
+            --card-foreground: 0 0% 20%;
+            --popover: 60 50% 97%;
+            --popover-foreground: 0 0% 20%;
+            --primary: 24 84% 31%; 
+            --primary-foreground: 30 100% 97%;
+            --secondary: 30 52% 75%;
+            --secondary-foreground: 25 69% 30%;
+            --muted: 60 30% 85%;
+            --muted-foreground: 0 0% 45.1%;
+            --accent: 30 52% 65%;
+            --accent-foreground: 0 0% 20%;
+            --destructive: 0 84.2% 60.2%;
+            --destructive-foreground: 0 0% 98%;
+            --border: 60 30% 80%;
+            --input: 60 30% 88%;
+            --ring: 24 84% 40%;
+            --radius: 0.5rem;
+        }
+        body {
+            background-color: hsl(var(--background));
+            color: hsl(var(--foreground));
+            font-family: sans-serif; /* Basic font for HTML representation */
+        }
+        .bg-primary { background-color: hsl(var(--primary)); }
+        .text-primary-foreground { color: hsl(var(--primary-foreground)); }
+        .text-primary { color: hsl(var(--primary)); }
+        .bg-card { background-color: hsl(var(--card)); }
+        .text-card-foreground { color: hsl(var(--card-foreground)); }
+        .text-accent { color: hsl(var(--accent)); }
+        .bg-amber-50 { background-color: #FFFBEB; } /* Approximation */
+        .text-foreground\/90 { opacity: 0.9; }
+        .text-foreground\/80 { opacity: 0.8; }
+        .text-foreground\/70 { opacity: 0.7; }
+        .bg-amber-700 { background-color: #B45309; } /* Approximation */
+        .bg-gray-900 { background-color: #111827; } /* Approximation */
+        .text-white { color: #FFFFFF; }
+        .line-clamp-3 {
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+        }
+        /* Custom animations from user request */
+        @keyframes fadeInDown {
+          from { opacity: 0; transform: translate3d(0, -20px, 0); }
+          to { opacity: 1; transform: translate3d(0, 0, 0); }
+        }
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translate3d(0, 20px, 0); }
+          to { opacity: 1; transform: translate3d(0, 0, 0); }
+        }
+        .animate-fade-in-down { animation: fadeInDown 1s ease-out; }
+        .animate-fade-in-up { animation: fadeInUp 1s ease-out 0.5s; animation-fill-mode: backwards; }
+        /* Basic modal styling for structure visibility - full functionality requires JS */
+        .modal-placeholder { display: none; padding: 20px; border: 1px dashed #ccc; margin-top: 20px; background-color: #f9f9f9; }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <header class="bg-gradient-to-r from-amber-900 to-amber-700 text-white shadow-lg p-4 md:p-6 rounded-b-lg sticky top-0 z-50">
+      <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+        <a href="/" class="text-3xl font-bold mb-4 md:mb-0 transform transition-transform duration-300 hover:scale-105 flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8 lucide lucide-coffee"><path d="M17 8h-7a4 4 0 0 0-4 4 4 4 0 0 0 4 4h7"/><path d="M20 12v4a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V8c0-1.4.9-2.7 2.2-3.3"/><path d="M14 12V8"/></svg>
+          متجر القهوة الفاخرة
+        </a>
+        
+        <div class="w-full md:w-auto flex flex-col items-center gap-2 mb-2 md:mb-0">
+          <!-- PersonalizedWelcomeMessage Placeholder -->
+          <div class="text-sm text-center md:text-right text-amber-100 mb-2 md:mb-0">
+             <!-- رسالة ترحيب تظهر هنا إذا كان المستخدم مسجل دخوله -->
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3 sm:gap-4">
+          <button class="text-white hover:bg-amber-800 p-2 rounded-md">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6 lucide lucide-menu"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+            <span class="sr-only">فتح القائمة</span>
+          </button>
+
+          <button class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-3 sm:px-4 rounded-full transition duration-300 shadow-md text-sm md:text-base flex items-center gap-1">
+             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 lucide lucide-log-in"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
+            تسجيل الدخول
+          </button>
+
+          <button class="relative text-white hover:text-amber-200 p-2 rounded-md">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6 lucide lucide-shopping-cart"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+            <span class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+            <span class="sr-only">سلة التسوق</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-grow">
+        <section id="home" class="relative bg-cover bg-center h-96 flex items-center justify-center text-white rounded-b-lg overflow-hidden shadow-inner">
+          <img src="https://placehold.co/1200x600.png" alt="قهوة طازجة" class="absolute inset-0 w-full h-full object-cover filter brightness-75" data-ai-hint="fresh coffee beans"/>
+          <div class="absolute inset-0 bg-black opacity-40"></div>
+          <div class="relative z-10 text-center p-4">
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-4 animate-fade-in-down">
+              استمتع بأفضل أنواع القهوة
+            </h1>
+            <p class="text-lg md:text-xl mb-8 animate-fade-in-up">
+              نقدم لك أجود حبوب البن من جميع أنحاء العالم
+            </p>
+            <a href="#products" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 animate-fade-in-up" style="animation-delay: 1s;">
+              اكتشف منتجاتنا
+            </a>
+          </div>
+        </section>
+
+        <section id="best-selling" class="container mx-auto py-12 px-4">
+          <h2 class="text-4xl font-bold text-center mb-10 text-primary">
+            الأكثر مبيعًا لدينا
+          </h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- ProductCard Placeholder 1 -->
+            <div class="overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-xl cursor-pointer flex flex-col h-full bg-card rounded-lg shadow-sm">
+              <div class="p-0">
+                <div class="relative w-full h-48">
+                  <img src="https://placehold.co/600x400.png" alt="قهوة الصباح المنعشة" class="absolute inset-0 w-full h-full object-cover" data-ai-hint="morning coffee"/>
+                </div>
+              </div>
+              <div class="p-6 flex-grow">
+                <div class="text-2xl font-semibold mb-2 text-primary">قهوة الصباح المنعشة</div>
+                <div class="text-sm mb-4 text-foreground/80 line-clamp-3">ابدأ يومك بنشاط مع هذا المزيج المنعش من حبوب الأرابيكا الفاخرة.</div>
+              </div>
+              <div class="flex justify-between items-center p-6 pt-0">
+                <span class="text-3xl font-bold text-accent">50.00 ر.س</span>
+                <button class="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2 px-5 rounded-full shadow-md">
+                  أضف للسلة
+                </button>
+              </div>
+            </div>
+            <!-- ProductCard Placeholder 2 -->
+            <div class="overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-xl cursor-pointer flex flex-col h-full bg-card rounded-lg shadow-sm">
+              <div class="p-0">
+                <div class="relative w-full h-48">
+                  <img src="https://placehold.co/600x400.png" alt="خلطة المساء الدافئة" class="absolute inset-0 w-full h-full object-cover" data-ai-hint="evening blend"/>
+                </div>
+              </div>
+              <div class="p-6 flex-grow">
+                <div class="text-2xl font-semibold mb-2 text-primary">خلطة المساء الدافئة</div>
+                <div class="text-sm mb-4 text-foreground/80 line-clamp-3">استرخِ في المساء مع هذه الخلطة الدافئة والغنية بنكهات الكاكاو والتوابل.</div>
+              </div>
+              <div class="flex justify-between items-center p-6 pt-0">
+                <span class="text-3xl font-bold text-accent">60.00 ر.س</span>
+                <button class="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2 px-5 rounded-full shadow-md">
+                  أضف للسلة
+                </button>
+              </div>
+            </div>
+            <!-- ProductCard Placeholder 3 -->
+            <div class="overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-xl cursor-pointer flex flex-col h-full bg-card rounded-lg shadow-sm">
+              <div class="p-0">
+                <div class="relative w-full h-48">
+                  <img src="https://placehold.co/600x400.png" alt="حبوب روبوستا القوية" class="absolute inset-0 w-full h-full object-cover" data-ai-hint="robusta beans"/>
+                </div>
+              </div>
+              <div class="p-6 flex-grow">
+                <div class="text-2xl font-semibold mb-2 text-primary">حبوب روبوستا القوية</div>
+                <div class="text-sm mb-4 text-foreground/80 line-clamp-3">لعشاق النكهة القوية والمرارة المميزة، حبوب روبوستا نقية ذات تركيز عالٍ.</div>
+              </div>
+              <div class="flex justify-between items-center p-6 pt-0">
+                <span class="text-3xl font-bold text-accent">45.00 ر.س</span>
+                <button class="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2 px-5 rounded-full shadow-md">
+                  أضف للسلة
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="products" class="container mx-auto py-12 px-4">
+          <h2 class="text-4xl font-bold text-center mb-10 text-primary">
+            منتجاتنا المميزة
+          </h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            <!-- Only a quarter of products shown here, example: -->
+            <div class="overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-xl cursor-pointer flex flex-col h-full bg-card rounded-lg shadow-sm">
+              <div class="p-0">
+                <div class="relative w-full h-48">
+                  <img src="https://placehold.co/600x400.png" alt="قهوة الصباح المنعشة" class="absolute inset-0 w-full h-full object-cover" data-ai-hint="morning coffee"/>
+                </div>
+              </div>
+              <div class="p-6 flex-grow">
+                <div class="text-2xl font-semibold mb-2 text-primary">قهوة الصباح المنعشة</div>
+                <div class="text-sm mb-4 text-foreground/80 line-clamp-3">ابدأ يومك بنشاط مع هذا المزيج المنعش من حبوب الأرابيكا الفاخرة.</div>
+              </div>
+              <div class="flex justify-between items-center p-6 pt-0">
+                <span class="text-3xl font-bold text-accent">50.00 ر.س</span>
+                <button class="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2 px-5 rounded-full shadow-md">
+                  أضف للسلة
+                </button>
+              </div>
+            </div>
+             <div class="overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-xl cursor-pointer flex flex-col h-full bg-card rounded-lg shadow-sm">
+              <div class="p-0">
+                <div class="relative w-full h-48">
+                  <img src="https://placehold.co/600x400.png" alt="خلطة المساء الدافئة" class="absolute inset-0 w-full h-full object-cover" data-ai-hint="evening blend"/>
+                </div>
+              </div>
+              <div class="p-6 flex-grow">
+                <div class="text-2xl font-semibold mb-2 text-primary">خلطة المساء الدافئة</div>
+                <div class="text-sm mb-4 text-foreground/80 line-clamp-3">استرخِ في المساء مع هذه الخلطة الدافئة والغنية بنكهات الكاكاو والتوابل.</div>
+              </div>
+              <div class="flex justify-between items-center p-6 pt-0">
+                <span class="text-3xl font-bold text-accent">60.00 ر.س</span>
+                <button class="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2 px-5 rounded-full shadow-md">
+                  أضف للسلة
+                </button>
+              </div>
+            </div>
+            <!-- Add more product card placeholders if needed to represent a quarter -->
+          </div>
+        </section>
+
+        <section id="about" class="bg-amber-50 py-12 px-4 rounded-lg shadow-inner mx-auto container">
+          <div class="flex flex-col md:flex-row items-center justify-center gap-8">
+            <div class="md:w-1/2">
+              <img src="https://placehold.co/600x400.png" alt="صورة عن المتجر" class="w-full h-auto rounded-xl shadow-lg object-cover" data-ai-hint="coffee shop interior"/>
+            </div>
+            <div class="md:w-1/2 text-center md:text-right">
+              <h2 class="text-4xl font-bold mb-6 text-primary">قصتنا</h2>
+              <p class="text-lg text-foreground/90 leading-relaxed mb-4">
+                في متجر القهوة الفاخرة، نؤمن بأن القهوة ليست مجرد مشروب، بل هي تجربة.
+                بدأت قصتنا بشغف عميق بالبن الفاخر ورغبة في مشاركة هذه التجربة الفريدة مع العالم.
+                نحن نسافر حول العالم لاكتشاف أجود أنواع حبوب البن، ونعمل مع مزارعين ملتزمين بالجودة والاستدامة.
+              </p>
+              <p class="text-lg text-foreground/90 leading-relaxed">
+                كل حبة بن يتم تحميصها بعناية فائقة هنا في منشآتنا لضمان وصول النكهة الكاملة والعطر الغني إلى فنجانك.
+                سواء كنت تفضل الإسبريسو القوي، أو القهوة العربية الأصيلة، أو القهوة المقطرة،
+                فإننا نعدك بتجربة لا تُنسى مع كل رشفة.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="bg-amber-700 text-white py-12 px-4 mt-12 rounded-lg shadow-lg mx-auto container">
+          <h2 class="text-4xl font-bold text-center mb-8">ماذا يقول عملاؤنا؟</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-card text-card-foreground p-6 rounded-xl shadow-md">
+              <div class="p-0">
+                <p class="italic mb-4 text-lg">"أفضل قهوة تذوقتها على الإطلاق! الجودة لا تضاهى والتوصيل سريع جداً."</p>
+                <p class="font-semibold text-primary">- سارة أ.، الرياض</p>
+              </div>
+            </div>
+            <div class="bg-card text-card-foreground p-6 rounded-xl shadow-md">
+              <div class="p-0">
+                <p class="italic mb-4 text-lg">"مجموعة رائعة من القهوة، وكل نوع له نكهته الخاصة. أنصح به بشدة!"</p>
+                <p class="font-semibold text-primary">- أحمد م.، جدة</p>
+              </div>
+            </div>
+          </div>
+        </section>
+    </main>
+
+    <footer id="contact" class="bg-gray-900 text-white py-8 px-4 mt-12 rounded-t-lg shadow-inner">
+      <div class="container mx-auto text-center">
+        <h3 class="text-2xl font-bold mb-4">تواصل معنا</h3>
+        <p class="mb-2">البريد الإلكتروني: info@coffeeshop.com</p>
+        <p class="mb-4">الهاتف: +966 50 123 4567</p>
+        <div class="flex justify-center space-x-6 mb-4">
+          <a href="#" aria-label="Twitter" class="text-gray-400 hover:text-white transition duration-300">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.107 4.107 0 001.27 5.477A4.072 4.072 0 012 10.425v.054a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.188a11.644 11.644 0 006.29 1.993" /></svg>
+          </a>
+          <a href="#" aria-label="Instagram" class="text-gray-400 hover:text-white transition duration-300">
+             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+          </a>
+          <a href="#" aria-label="Facebook" class="text-gray-400 hover:text-white transition duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 lucide lucide-facebook"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+        </div>
+        <button class="text-amber-400 hover:text-amber-200 transition duration-300 text-lg">
+          تتبع طلبك
+        </button>
+        <p class="mt-6 text-gray-500">&copy; 2024 متجر القهوة الفاخرة. جميع الحقوق محفوظة.</p>
+      </div>
+    </footer>
+
+    <!-- Modal Placeholders - content and interactivity handled by React components -->
+    <div class="modal-placeholder" id="cart-modal-placeholder">محتوى سلة التسوق (يتم عرضه ديناميكياً)</div>
+    <div class="modal-placeholder" id="checkout-modal-placeholder">محتوى نافذة الدفع (يتم عرضه ديناميكياً)</div>
+    <div class="modal-placeholder" id="payment-modal-placeholder">محتوى نافذة اختيار طريقة الدفع (يتم عرضه ديناميكياً)</div>
+    <div class="modal-placeholder" id="confirmation-modal-placeholder">محتوى نافذة تأكيد الطلب (يتم عرضه ديناميكياً)</div>
+    <div class="modal-placeholder" id="tracking-modal-placeholder">محتوى نافذة تتبع الطلب (يتم عرضه ديناميكياً)</div>
+    <div class="modal-placeholder" id="login-modal-placeholder">محتوى نافذة تسجيل الدخول (يتم عرضه ديناميكياً)</div>
+    <div class="modal-placeholder" id="register-modal-placeholder">محتوى نافذة التسجيل (يتم عرضه ديناميكياً)</div>
+    <div class="modal-placeholder" id="product-detail-modal-placeholder">محتوى نافذة تفاصيل المنتج (يتم عرضه ديناميكياً)</div>
+
+</body>
+</html>
+
+    
