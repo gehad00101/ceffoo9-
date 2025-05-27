@@ -23,15 +23,23 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAppStore } from "@/hooks/use-app-store";
 import { X } from "lucide-react";
 
-// Schema for customer information only
+const saudiCities = [
+  "الرياض", "جدة", "مكة المكرمة", "المدينة المنورة", "الدمام", 
+  "الخبر", "الظهران", "الطائف", "تبوك", "بريدة", "عنيزة", "الرس",
+  "أبها", "خميس مشيط", "حائل", "جازان", "نجران", "الهفوف", 
+  "المبرز", "ينبع", "الجبيل", "سكاكا", "عرعر", "الباحة"
+];
+
+// Schema for customer information
 const customerInfoSchema = z.object({
   customerName: z.string().min(3, { message: "الاسم يجب أن يكون 3 أحرف على الأقل." }),
   customerEmail: z.string().email({ message: "الرجاء إدخال بريد إلكتروني صحيح." }),
-  customerAddress: z.string().min(10, { message: "العنوان يجب أن يكون 10 أحرف على الأقل." }),
+  customerCity: z.string({ required_error: "الرجاء اختيار المدينة." }),
+  customerStreetAddress: z.string().min(5, { message: "عنوان الشارع يجب أن يكون 5 أحرف على الأقل." }),
   customerPhone: z.string().regex(/^(\+966|0)?5\d{8}$/, { message: "الرجاء إدخال رقم هاتف سعودي صحيح (مثال: 05xxxxxxxx أو +9665xxxxxxxx)." }),
 });
 
@@ -45,7 +53,8 @@ export default function CheckoutModal() {
     defaultValues: {
       customerName: "",
       customerEmail: "",
-      customerAddress: "",
+      customerCity: undefined,
+      customerStreetAddress: "",
       customerPhone: "",
     },
   });
@@ -56,14 +65,16 @@ export default function CheckoutModal() {
         form.reset({
           customerName: loggedInUser.username || "",
           customerEmail: loggedInUser.email || "",
-          customerAddress: "", 
+          customerCity: undefined, // City needs to be selected by user
+          customerStreetAddress: "", // Street address needs to be entered
           customerPhone: loggedInUser.phone || "",
         });
       } else {
         form.reset({ 
           customerName: "",
           customerEmail: "",
-          customerAddress: "",
+          customerCity: undefined,
+          customerStreetAddress: "",
           customerPhone: "",
         });
       }
@@ -72,8 +83,16 @@ export default function CheckoutModal() {
 
   const onSubmit = (data: CustomerInfoFormValues) => {
     const totalAmount = cartTotal();
+    // Combine city and street address for the `customerAddress` field expected by `placeOrder`
+    const fullAddress = `${data.customerCity}, ${data.customerStreetAddress}`;
+    const customerDetailsForPayment = {
+        customerName: data.customerName,
+        customerEmail: data.customerEmail,
+        customerAddress: fullAddress, // Pass combined address
+        customerPhone: data.customerPhone,
+    };
     closeModal(); 
-    openModal('payment', { customerDetails: data, totalAmount }); 
+    openModal('payment', { customerDetails: customerDetailsForPayment, totalAmount }); 
   };
   
   if (openModalType !== 'checkout') return null;
@@ -119,12 +138,36 @@ export default function CheckoutModal() {
             />
             <FormField
               control={form.control}
-              name="customerAddress"
+              name="customerCity"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-lg font-semibold">العنوان:</FormLabel>
+                  <FormLabel className="text-lg font-semibold">المدينة:</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="p-3 text-base">
+                        <SelectValue placeholder="اختر مدينة" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {saudiCities.map((city) => (
+                        <SelectItem key={city} value={city} className="text-lg">
+                          {city}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+             <FormField
+              control={form.control}
+              name="customerStreetAddress"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-lg font-semibold">عنوان الشارع (الحي، الشارع، رقم المبنى):</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="المدينة، الحي، الشارع، رقم المبنى" rows={3} {...field} className="p-3 text-base"/>
+                    <Input placeholder="مثال: حي العليا، شارع الملك فهد، مبنى 123" {...field} className="p-3 text-base"/>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
