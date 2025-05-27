@@ -13,7 +13,7 @@ export default function HeroSection() {
         objectFit="cover" 
         quality={80}
         className="filter brightness-75" // Darken the image slightly for better text contrast
-        data-ai-hint="fresh coffee"
+        data-ai-hint="fresh coffee beans"
       />
       <div className="absolute inset-0 bg-black opacity-40"></div> {/* Overlay */}
       <div className="relative z-10 text-center p-4">
