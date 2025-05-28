@@ -1,18 +1,18 @@
 
 import type { Metadata } from 'next';
-import { Geist } from 'next/font/google'; 
+import { Geist } from 'next/font/google'; // Using Geist as per existing setup
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import AppProvider from '@/components/AppProvider'; 
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
-  subsets: ['latin', 'arabic'], // Added arabic
+  subsets: ['latin', 'arabic'], 
 });
 
 export const metadata: Metadata = {
-  title: 'اختبار الفراعنة | Pharaoh\'s Quiz', 
-  description: 'اختبر معلوماتك عن حكام مصر القدماء وتاريخهم الغني!', 
+  title: 'متجر القهوة الفاخرة', 
+  description: 'استمتع بأفضل أنواع القهوة من جميع أنحاء العالم', 
 };
 
 export default function RootLayout({

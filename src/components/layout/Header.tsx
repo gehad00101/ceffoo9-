@@ -2,7 +2,7 @@
 "use client";
 
 import Link from 'next/link';
-import { Menu, ShoppingCart, LogOut, LogIn, ScrollText } from 'lucide-react'; // Changed Coffee to ScrollText
+import { Menu, ShoppingCart, LogOut, LogIn, Coffee } from 'lucide-react'; // Reverted to Coffee icon
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import { useAppStore } from '@/hooks/use-app-store';
@@ -11,18 +11,15 @@ import PersonalizedWelcomeMessage from './PersonalizedWelcomeMessage';
 
 const navLinks = [
   { href: '/', label: 'الرئيسية' },
-  { href: '/#products', label: 'الأقسام' }, // Changed from "منتجاتنا"
-  // Links like '/coffee-selection' and '/coffee-tools' might need to be re-evaluated for a quiz app
-  // For now, keeping them but their relevance is reduced.
+  { href: '/#products', label: 'منتجاتنا' }, 
   { href: '/coffee-selection', label: 'القهوة' }, 
   { href: '/coffee-tools', label: 'أدوات القهوة' }, 
-  { href: '/#about', label: 'عن الاختبار' }, // Changed from "من نحن"
+  { href: '/#about', label: 'من نحن' }, // Reverted to "من نحن"
   { href: '/#contact', label: 'اتصل بنا' },
 ];
 
 export default function Header() {
   const { cartItemCount, openModal, loggedInUser, logout, fetchPersonalizedWelcome } = useAppStore();
-  // Cart functionality might be irrelevant for a quiz app, but keeping store integration for now.
   const totalItems = cartItemCount(); 
 
   useEffect(() => {
@@ -41,11 +38,11 @@ export default function Header() {
   };
 
   return (
-    <header className="bg-gradient-to-r from-primary via-amber-600 to-yellow-700 text-primary-foreground shadow-lg p-4 md:p-6 rounded-b-lg sticky top-0 z-50">
+    <header className="bg-gradient-to-r from-amber-900 to-amber-700 text-white shadow-lg p-4 md:p-6 rounded-b-lg sticky top-0 z-50">
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
         <Link href="/" className="text-3xl font-bold mb-4 md:mb-0 transform transition-transform duration-300 hover:scale-105 flex items-center gap-2">
-          <ScrollText className="h-8 w-8 text-yellow-300" /> {/* Changed icon and color */}
-          اختبار الفراعنة
+          <Coffee className="h-8 w-8" /> {/* Reverted to Coffee icon and color */}
+          متجر القهوة الفاخرة
         </Link>
         
         <div className="w-full md:w-auto flex flex-col items-center gap-2 mb-2 md:mb-0">
@@ -55,7 +52,7 @@ export default function Header() {
         <div className="flex items-center gap-3 sm:gap-4">
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="text-primary-foreground hover:bg-primary/80">
+              <Button variant="ghost" size="icon" className="text-white hover:bg-amber-800">
                 <Menu className="h-6 w-6" />
                 <span className="sr-only">فتح القائمة</span>
               </Button>
@@ -78,7 +75,7 @@ export default function Header() {
 
           <Button
             onClick={handleAuthAction}
-            className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-3 sm:px-4 rounded-full transition duration-300 shadow-md text-sm md:text-base"
+            className="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-3 sm:px-4 rounded-full transition duration-300 shadow-md text-sm md:text-base"
           >
             {loggedInUser ? (
               <>
@@ -93,13 +90,12 @@ export default function Header() {
             )}
           </Button>
 
-          {/* Cart icon might be removed or repurposed for a quiz app */}
           <Button
             variant="ghost"
             size="icon"
-            className="relative text-primary-foreground hover:text-yellow-300"
+            className="relative text-white hover:text-amber-200"
             onClick={() => openModal('cart')}
-            title="سلة التسوق (قد يتم إزالتها)"
+            title="سلة التسوق"
           >
             <ShoppingCart className="h-6 w-6" />
             {totalItems > 0 && (
