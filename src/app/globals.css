@@ -5,92 +5,99 @@
 
 @layer base {
   :root {
-    --background: 60 56% 91%; /* Light Beige #F5F5DC */
-    --foreground: 0 0% 20%; /* Dark Gray #333333 */
+    --background: 40 50% 92%; /* Sandy Beige */
+    --foreground: 0 0% 10%; /* Almost Black */
 
-    --card: 60 50% 97%; /* Lighter Beige for cards */
-    --card-foreground: 0 0% 20%;
+    --card: 40 45% 96%; /* Lighter Sandy Beige */
+    --card-foreground: 0 0% 10%;
 
-    --popover: 60 50% 97%;
-    --popover-foreground: 0 0% 20%;
+    --popover: 40 45% 96%;
+    --popover-foreground: 0 0% 10%;
 
-    --primary: 24 84% 31%; /* Rich Coffee Brown (closer to amber-800 #92400e) */
-    --primary-foreground: 30 100% 97%; /* Light color for text on primary */
+    --primary: 43 74% 49%; /* Gold */
+    --primary-foreground: 40 100% 97%; /* Light Cream for text on Gold */
 
-    --secondary: 30 52% 75%; /* Lighter Gold/Amber for secondary elements */
-    --secondary-foreground: 25 69% 30%; /* Coffee Brown text on secondary */
+    --secondary: 223 55% 35%; /* Deep Blue (Lapis Lazuli) */
+    --secondary-foreground: 40 100% 95%; /* Light Cream/Pale Gold on Lapis */
 
-    --muted: 60 30% 85%; /* Muted beige */
-    --muted-foreground: 0 0% 45.1%;
+    --muted: 30 30% 85%; /* Muted Sand/Light Terracotta */
+    --muted-foreground: 30 10% 40%; /* Darker Muted Brown */
 
-    --accent: 30 52% 65%; /* Warm Gold #D4A27A */
-    --accent-foreground: 0 0% 20%; /* Dark text on accent */
+    --accent: 174 72% 56%; /* Turquoise */
+    --accent-foreground: 0 0% 10%; /* Almost Black on Turquoise */
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 10 70% 50%; /* Earthy Red/Carnelian */
+    --destructive-foreground: 0 0% 98%; /* Light Cream */
 
-    --border: 60 30% 80%; /* Beige border */
-    --input: 60 30% 88%; /* Beige input background */
-    --ring: 24 84% 40%; /* Ring color based on primary */
+    --border: 30 30% 75%; /* Darker Sand/Light Terracotta Border */
+    --input: 40 50% 94%; /* Slightly Lighter Sandy Beige for Input */
+    --ring: 43 74% 55%; /* Brighter Gold for Ring */
 
     --radius: 0.5rem;
 
-    /* Chart colors (can be adjusted if charts are used) */
-    --chart-1: 25 69% 30%;
-    --chart-2: 30 52% 65%;
-    --chart-3: 20 60% 40%;
-    --chart-4: 35 50% 55%;
-    --chart-5: 15 65% 35%;
+    /* Chart colors */
+    --chart-1: 43 74% 49%;  /* Gold */
+    --chart-2: 223 55% 35%; /* Lapis Blue */
+    --chart-3: 174 72% 56%; /* Turquoise */
+    --chart-4: 25 50% 60%;  /* Terracotta/Orange-brown */
+    --chart-5: 43 60% 65%;  /* Lighter Gold */
 
-    /* Sidebar specific colors - can inherit or be distinct */
-    --sidebar-background: 0 0% 100%; /* White sidebar */
-    --sidebar-foreground: 24 84% 31%; /* Coffee brown text */
-    --sidebar-primary: 24 84% 31%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 60 56% 91%; /* Light beige for hover */
-    --sidebar-accent-foreground: 24 84% 31%;
-    --sidebar-border: 0 0% 89.8%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Sidebar specific colors */
+    --sidebar-background: 30 25% 20%; /* Dark Brown (Papyrus/Wood) */
+    --sidebar-foreground: 43 70% 70%; /* Pale Gold */
+    --sidebar-primary: 43 74% 60%;    /* Gold (slightly lighter for primary items) */
+    --sidebar-primary-foreground: 30 25% 10%; /* Very Dark Brown */
+    --sidebar-accent: 30 25% 30%;     /* Slightly Lighter Brown (hover) */
+    --sidebar-accent-foreground: 43 74% 75%; /* Brighter Pale Gold */
+    --sidebar-border: 30 25% 15%;
+    --sidebar-ring: 43 74% 55%;
   }
 
   .dark {
-    /* Define dark theme colors if needed, for now keep them similar or adjust based on primary */
-    --background: 0 0% 10%; /* Dark background */
-    --foreground: 0 0% 95%; /* Light text */
+    --background: 220 15% 15%; /* Dark Charcoal/Blue-Gray */
+    --foreground: 40 30% 85%;  /* Light Sand/Cream */
 
-    --card: 0 0% 15%;
-    --card-foreground: 0 0% 95%;
+    --card: 220 15% 20%;
+    --card-foreground: 40 30% 85%;
 
-    --popover: 0 0% 15%;
-    --popover-foreground: 0 0% 95%;
+    --popover: 220 15% 20%;
+    --popover-foreground: 40 30% 85%;
 
-    --primary: 30 52% 65%; /* Gold as primary in dark */
-    --primary-foreground: 0 0% 10%;
+    --primary: 45 80% 60%;     /* Brighter Gold */
+    --primary-foreground: 0 0% 10%; /* Dark Charcoal/Black */
 
-    --secondary: 25 69% 30%; /* Coffee brown as secondary in dark */
-    --secondary-foreground: 0 0% 95%;
+    --secondary: 174 70% 65%;  /* Brighter Turquoise */
+    --secondary-foreground: 0 0% 10%; /* Dark Charcoal/Black */
 
-    --muted: 0 0% 20%;
-    --muted-foreground: 0 0% 63.9%;
+    --muted: 220 10% 30%;      /* Darker Gray */
+    --muted-foreground: 40 20% 70%; /* Lighter Gray/Sand */
 
-    --accent: 24 84% 31%; /* Coffee brown as accent */
-    --accent-foreground: 0 0% 95%;
+    --accent: 223 60% 50%;     /* Lapis Blue (brighter) */
+    --accent-foreground: 40 100% 95%; /* Light Cream */
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 70% 60%;   /* Brighter Red */
     --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 25%;
-    --input: 0 0% 20%;
-    --ring: 30 52% 70%;
+    --border: 220 10% 25%;     /* Medium Gray Border */
+    --input: 220 15% 22%;      /* Slightly Lighter than Card for Input */
+    --ring: 45 80% 65%;        /* Gold Ring */
     
-    --sidebar-background: 0 0% 12%;
-    --sidebar-foreground: 30 52% 65%;
-    --sidebar-primary: 30 52% 65%;
+    /* Chart colors */
+    --chart-1: 45 80% 60%;  /* Gold */
+    --chart-2: 174 70% 65%; /* Turquoise */
+    --chart-3: 223 60% 50%; /* Lapis Blue */
+    --chart-4: 30 60% 70%;  /* Brighter Terracotta */
+    --chart-5: 45 70% 75%;  /* Pale Gold */
+
+    /* Sidebar specific colors - Dark Theme */
+    --sidebar-background: 0 0% 8%;       /* Almost Black */
+    --sidebar-foreground: 45 80% 70%;     /* Gold */
+    --sidebar-primary: 45 85% 65%;        /* Brighter Gold */
     --sidebar-primary-foreground: 0 0% 10%;
-    --sidebar-accent: 0 0% 20%;
-    --sidebar-accent-foreground: 30 52% 65%;
-    --sidebar-border: 0 0% 25%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 0 0% 15%;          /* Dark Gray for hover */
+    --sidebar-accent-foreground: 174 70% 70%; /* Turquoise */
+    --sidebar-border: 0 0% 12%;
+    --sidebar-ring: 45 85% 60%;
   }
 }
 
@@ -106,15 +113,15 @@
     width: 8px;
   }
   ::-webkit-scrollbar-track {
-    background: hsl(var(--muted)); /* Use theme color */
+    background: hsl(var(--muted)); 
     border-radius: 10px;
   }
   ::-webkit-scrollbar-thumb {
-    background: hsl(var(--accent)); /* Use theme color */
+    background: hsl(var(--accent)); 
     border-radius: 10px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--primary)); /* Use theme color */
+    background: hsl(var(--primary)); 
   }
 }
 

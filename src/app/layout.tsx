@@ -1,22 +1,18 @@
+
 import type { Metadata } from 'next';
-import { Geist } from 'next/font/google'; // Using Geist as per existing setup
+import { Geist } from 'next/font/google'; 
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
-import AppProvider from '@/components/AppProvider'; // Renamed from contexts/AppContext
+import AppProvider from '@/components/AppProvider'; 
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
-  subsets: ['latin'], // Keep latin, add 'arabic' if Geist supports and is needed for specific styles
+  subsets: ['latin', 'arabic'], // Added arabic
 });
 
-// If a specific Arabic font like 'Inter' is strictly required and Geist doesn't cover Arabic well:
-// import { Inter } from 'next/font/google';
-// const inter = Inter({ subsets: ['latin', 'arabic'], variable: '--font-inter' });
-// className={`${geistSans.variable} ${inter.variable} antialiased`}
-
 export const metadata: Metadata = {
-  title: 'متجر القهوة الفاخرة', // Updated title
-  description: 'استمتع بأفضل أنواع القهوة من جميع أنحاء العالم', // Updated description
+  title: 'اختبار الفراعنة | Pharaoh\'s Quiz', 
+  description: 'اختبر معلوماتك عن حكام مصر القدماء وتاريخهم الغني!', 
 };
 
 export default function RootLayout({
